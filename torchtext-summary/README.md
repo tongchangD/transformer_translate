@@ -19,7 +19,9 @@
 - http://www.nlpuser.com/pytorch/2018/10/30/useTorchText/
 - https://blog.csdn.net/nlpuser/article/details/88067167
 
-&nbsp;&nbsp;&nbsp;&nbsp;代码中在数据集中使用预训练词向量部分已注释为markdown格式，如下所示，若要使用预训练的词向量，例如glove开源的预训练词向量，需要在当前目录下创建mycache文件夹作为cache目录，并指定预训练词向量文件所在位置。glove词向量下载可参考此链接：https://pan.baidu.com/s/1i5XmTA9
+&nbsp;&nbsp;&nbsp;&nbsp;代码中在数据集中使用预训练词向量部分已注释为markdown格式，如下所示，若要使用预训练的词向量
+，例如glove开源的预训练词向量，需要在当前目录下创建mycache文件夹作为cache目录，并指定预训练词向量文件所在位置。
+glove词向量下载可参考此链接：https://pan.baidu.com/s/1i5XmTA9
 
     ###  通过预训练的词向量来构建词表的方式示例，以glove.6B.300d词向量为例
     cache = 'mycache'
@@ -31,3 +33,4 @@
     TEXT.build_vocab(train, min_freq=5, vectors=vectors)
     # 查看词表元素
     TEXT.vocab.vectors
+``

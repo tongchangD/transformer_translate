@@ -13,9 +13,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
-
 tokenize = lambda x: x.split()
+# # fix_length指定了每条文本的长度，截断补长
+# TEXT = data.Field(sequential=True, tokenize=tokenize, lower=True, fix_length=200)
+# LABEL = data.Field(sequential=False, use_vocab=False)
 TEXT = data.Field(sequential=True, tokenize=tokenize, lower=True, fix_length=200)
+print(TEXT)
 LABEL = data.Field(sequential=False, use_vocab=False)
 train_path = 'data/train_one_label.csv'
 valid_path = "data/valid_one_label.csv"
@@ -72,7 +75,7 @@ class LSTM(nn.Module):
         super(LSTM, self).__init__()
         self.word_embeddings = nn.Embedding(len(TEXT.vocab), 300)  # embedding之后的shape: torch.Size([200, 8, 300])
         # 若使用预训练的词向量，需在此处指定预训练的权重
-        embedding.weight.data.copy_(weight_matrix)
+        self.embedding.weight.data.copy_(weight_matrix)
         self.lstm = nn.LSTM(input_size=300, hidden_size=128, num_layers=1)  # torch.Size([200, 8, 128])
         self.decoder = nn.Linear(128, 2)
 
@@ -86,6 +89,12 @@ class LSTM(nn.Module):
 
 
 def data_iter(train_path, valid_path, test_path, TEXT, LABEL):
+    # train_path = 'data/train_one_label.csv'
+    # valid_path = "data/valid_one_label.csv"
+    # test_path = "data/test.csv"
+    # TEXT = data.Field(sequential=True, tokenize=tokenize, lower=True, fix_length=200)
+    # LABEL = data.Field(sequential=False, use_vocab=False)
+
     train = MyDataset(train_path, text_field=TEXT, label_field=LABEL, test=False, aug=1)
     valid = MyDataset(valid_path, text_field=TEXT, label_field=LABEL, test=False, aug=1)
     # 因为test没有label,需要指定label_field为None
@@ -106,12 +115,12 @@ def data_iter(train_path, valid_path, test_path, TEXT, LABEL):
             repeat=False
     )
     test_iter = Iterator(test, batch_size=8, device=-1, sort=False, sort_within_batch=False, repeat=False)
+    print("train_iter",train_iter)
     return train_iter, val_iter, test_iter, weight_matrix
 
 
 def main():
     train_iter, val_iter, test_iter, weight_matrix = data_iter(train_path, valid_path, test_path, TEXT, LABEL)
-
     model = LSTM(weight_matrix)
     model.train()
     optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=0.01)

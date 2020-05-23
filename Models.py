@@ -55,13 +55,13 @@ def get_model(opt, src_vocab, trg_vocab):
     
     assert opt.d_model % opt.heads == 0
     assert opt.dropout < 1
-    print("src_vocab",src_vocab)
-    print("trg_vocab",trg_vocab)
+    # print("src_vocab",src_vocab)
+    # print("trg_vocab",trg_vocab)
     model = Transformer(src_vocab, trg_vocab, opt.d_model, opt.n_layers, opt.heads, opt.dropout)
        
     if opt.premodels:
         print("loading pretrained weights...")
-        model.load_state_dict(torch.load(f'{opt.load_weights}/model_weights'))
+        model.load_state_dict(torch.load(f'{opt.load_weights}/model_weights_100'))
     else:
         for p in model.parameters():
             if p.dim() > 1:

@@ -55,6 +55,8 @@ def batch_size_fn(new, count, sofar):
     if count == 1:
         max_src_in_batch = 0
         max_tgt_in_batch = 0
+    # print("max_src_in_batch",max_src_in_batch)
+    # print(" len(new.src)", len(new.src))
     max_src_in_batch = max(max_src_in_batch,  len(new.src))
     max_tgt_in_batch = max(max_tgt_in_batch,  len(new.trg) + 2)
     src_elements = count * max_src_in_batch
